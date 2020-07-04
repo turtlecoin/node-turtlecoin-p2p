@@ -1,0 +1,10 @@
+{
+    "name": "turtlecoin-p2p",
+    "out": "./docs",
+    "excludeExternals": false,
+    "excludeNotExported": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "listInvalidSymbolLinks": true,
+    "mode": "file"
+}
