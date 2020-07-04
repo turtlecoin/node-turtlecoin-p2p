@@ -14,7 +14,13 @@ describe('Initialize P2P Service', function() {
         return Math.floor(Math.random() * (65535 - 1025)) + 1025;
     }
 
-    let server: P2P = new P2P('0.0.0.0', rnd());
+    const server: P2P = new P2P('0.0.0.0', rnd());
+
+    let handshakeReceived = false;
+
+    server.on('handshake', () => {
+        handshakeReceived = true;
+    })
 
     before('Initialize Server', async() => {
         return server.start();
@@ -28,8 +34,32 @@ describe('Initialize P2P Service', function() {
         assert(server.connections !== 0);
     })
 
-    it('Receives peer list', async() => {
-        assert(server.peers.length !== 0);
+    it('Received Handshake', async function() {
+        this.timeout(15 * 1000);
+
+        return new Promise(resolve => {
+            setTimeout(() => {
+                if (handshakeReceived) {
+                    return resolve();
+                }
+
+                return this.skip();
+            }, 2 * 1000);
+        })
+    })
+
+    it('Has Peer List',  async function() {
+        this.timeout(15 * 1000);
+
+        return new Promise(resolve => {
+            setTimeout(() => {
+                if (server.peers.length !== 0) {
+                    return resolve();
+                }
+
+                return this.skip();
+            }, 2 * 1000);
+        })
     })
 
     it ('Receives Lite Block', async function() {
