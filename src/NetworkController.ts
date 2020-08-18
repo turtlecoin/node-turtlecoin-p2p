@@ -30,7 +30,7 @@ import IPeer = Interfaces.IPeer;
  */
 export class NetworkController extends EventEmitter {
     private m_networkId = 'b50c4a6ccf52574165f991a4b6c143e9';
-    private m_version = 8;
+    private m_version = 11;
     private m_id: string = UUID.v4()
         .toString()
         .replace(/[-l1io0]/gi, '')
@@ -162,6 +162,9 @@ export class NetworkController extends EventEmitter {
     }
 
     public on(
+        event: 'clientError', listener: (id: string, error: Error) => void): this;
+
+    public on(
         event: 'close', listener: () => void): this;
 
     public on(
@@ -245,6 +248,10 @@ export class NetworkController extends EventEmitter {
 
         client.on('packet', (id, packet) => {
             this.handlePacket(id, packet, false);
+        });
+
+        client.on('error', (id, error) => {
+            this.emit('clientError', id, error);
         });
 
         this.m_outgoing.push(client);

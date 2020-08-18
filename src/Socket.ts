@@ -217,7 +217,7 @@ export class Socket extends EventEmitter {
      * @param data the data to write to the socket
      * @param encoding the encoding to use when writing
      */
-    public async write (data: string | Buffer, encoding = 'utf8'): Promise<boolean> {
+    public async write (data: string | Buffer, encoding: any = 'utf8'): Promise<boolean> {
         return new Promise((resolve, reject) =>
             this.m_socket.write(data, encoding, (error) => {
                 if (error) {
